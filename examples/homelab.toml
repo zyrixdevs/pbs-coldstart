@@ -1,0 +1,36 @@
+schema_version = 1
+system_name = "Northstar Homelab (fictional)"
+pve_host = "pve-main"
+pbs_host = "pbs-vm"
+pbs_is_vm_on_protected_pve = true
+pbs_vm_id = 900
+bootstrap_host = "spare-pve"
+bootstrap_host_independent = true
+pve_config_backup_off_host = true
+pbs_config_backup_off_host = true
+pbs_vm_backup_in_datastore = true
+
+[datastore]
+name = "nas-backups"
+mount_path = "/mnt/pbs/nas-backups"
+independent_of_pve = true
+accessible_without_pve = true
+fresh_instance_reuse_tested = false
+
+[encryption]
+client_side_encryption = true
+key_reference = "offline password-manager item (fictional)"
+key_available_without_pve = true
+key_available_without_pbs = true
+
+[[critical_guests]]
+vmid = 101
+name = "router-services"
+backup_reference = "nas-backups / vm/101 (fictional)"
+restore_drill_completed = false
+
+[[critical_guests]]
+vmid = 102
+name = "photos"
+backup_reference = "nas-backups / vm/102 (fictional)"
+restore_drill_completed = false

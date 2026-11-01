@@ -33,11 +33,11 @@ The free CLI is for a single lab. The paid path to validate is a quarterly cold-
 
 ## Current validation status
 
-This is a research prototype, not a validated business. Follow-up evidence weakens the original PBS cold-start wedge: operators describe reattaching a datastore as a short recovery step, ProxMenux demonstrates host-configuration restore, and commercial products already cover broader Proxmox DR and MSP restore reports. Keep this CLI small until customer discovery identifies a gap someone will pay to close. The [market notes](docs/market-evidence.md) record both supporting and opposing evidence.
+This is a research prototype, not a validated business. Follow-up evidence weakens the original PBS cold-start wedge: operators describe reattaching a datastore as a short recovery step, ProxMenux demonstrates host-configuration restore, and commercial products cover broader Proxmox DR and MSP restore reports. Newer entrants also cover scheduled and application-aware restore checks across Proxmox, Restic, and Borg. Keep this CLI small until customer discovery identifies a distinct workflow people will pay to close. The [market notes](docs/market-evidence.md) record supporting evidence, counter-evidence, and competitors.
 
 ## Competitive boundary
 
-This is not another backup engine, host-configuration backup tool, or VM restore-testing dashboard. ProxSave and ProxMenux already cover host configuration backup/recovery; AutoRPO and Asternodis cover nearby restore testing or disaster-recovery orchestration. The remaining PBS bootstrap dependency and out-of-band key/access path is only a candidate wedge; its severity and willingness to pay are unproven.
+This is not another backup engine, host-configuration backup tool, or VM restore-testing dashboard. ProxSave and ProxMenux cover host configuration backup/recovery; AutoRPO and Asternodis cover Proxmox restore testing and disaster-recovery orchestration; Vaultwitness and Restorable cover recurring, app-aware recovery checks across common backup stacks. The remaining PBS bootstrap dependency and out-of-band key/access path is only a candidate wedge; its severity and willingness to pay are unproven.
 
 ## License
 

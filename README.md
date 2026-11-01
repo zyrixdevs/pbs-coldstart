@@ -1,6 +1,6 @@
 # PBS Coldstart
 
-Audit the recovery path for a Proxmox Backup Server (PBS) that runs as a VM on the Proxmox VE (PVE) host it protects. Generate a portable cold-start runbook before that host fails.
+Audit declared recovery dependencies for a Proxmox Backup Server (PBS) that runs as a VM on the Proxmox VE (PVE) host it protects. Generate a portable cold-start checklist for an operator to review.
 
 ## The failure this targets
 
@@ -31,9 +31,13 @@ Copy `examples/homelab.toml` and replace its fictional values. Do not put secret
 
 The free CLI is for a single lab. The paid path to validate is a quarterly cold-start rehearsal and recovery-evidence service for small MSPs managing Proxmox clients, with the CLI generating a consistent, portable report. Existing providers sell emergency Proxmox support and restore testing, which shows a paid service category exists; it does not prove buyers want this specific tool or service. See [the market notes](docs/market-evidence.md).
 
+## Current validation status
+
+This is a research prototype, not a validated business. Follow-up evidence weakens the original PBS cold-start wedge: operators describe reattaching a datastore as a short recovery step, ProxMenux demonstrates host-configuration restore, and commercial products already cover broader Proxmox DR and MSP restore reports. Keep this CLI small until customer discovery identifies a gap someone will pay to close. The [market notes](docs/market-evidence.md) record both supporting and opposing evidence.
+
 ## Competitive boundary
 
-This is not another backup engine, host-configuration backup tool, or VM restore-testing dashboard. ProxSave and ProxMenux already cover host configuration backup/recovery; AutoRPO and Asternodis cover nearby restore testing or disaster-recovery orchestration. The unvalidated wedge is the PBS bootstrap dependency and off-host key/access path. Stop or pivot if customer interviews show existing tools already prove that path adequately.
+This is not another backup engine, host-configuration backup tool, or VM restore-testing dashboard. ProxSave and ProxMenux already cover host configuration backup/recovery; AutoRPO and Asternodis cover nearby restore testing or disaster-recovery orchestration. The remaining PBS bootstrap dependency and out-of-band key/access path is only a candidate wedge; its severity and willingness to pay are unproven.
 
 ## License
 

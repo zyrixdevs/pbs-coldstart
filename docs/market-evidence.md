@@ -9,6 +9,17 @@
 
 These posts establish examples of pain, not market size or willingness to pay.
 
+## Counter-evidence and competitive reassessment (November 2026)
+
+- The original cold-start thread received only a small number of votes, and a response describes installing PBS on another machine and attaching the datastore as a roughly 20-minute recovery step. This weakens the claim that the setup delay is a sufficiently costly problem for a standalone product. [Discussion and response](https://www.reddit.com/r/homelab/comments/1vwvwvb/budget_homelab_disaster_recovery_procedure/)
+- A recent independent test reports that ProxMenux restored PVE host configuration after a clean installation, while VM/LXC disks still needed separate restore. This directly overlaps part of the recovery checklist. [ProxMenux recovery test](https://www.reddit.com/r/Proxmox/comments/1v1vx1o/proxmenux_can_now_back_up_and_restore_a_proxmox/)
+- Asternodis markets Proxmox replication, isolated DR tests, recovery plans, failover/failback, and MSP multi-site plans. Its listed business tiers range from $995/year for one pair to MSP packs. That is direct competition for the broader Proxmox DR category, not proof those prices are realized sales. [Asternodis](https://asternodis.com/)
+- AutoRPO markets MSP fleet reporting and signed monthly restore reports, directly overlapping the paid quarterly-report hypothesis. [AutoRPO MSP offering](https://autorpo.com/msp)
+- A September 2026 self-hosted user with 75 votes asked for a Compose-aware backup system that lists projects and volumes, schedules backups to two destinations, and supports restore. Responses describe existing choices including Zerobyte, Restic/Backrest, Kopia, and user-built scripts. This is a stronger pain signal than the original PBS bootstrap example, but the backup-management space is also crowded. [Discussion](https://www.reddit.com/r/selfhosted/comments/1we6jj9/a_server_backup_solution_that_actually_works/)
+- Self-hosted continuity if the operator dies or is incapacitated draws repeated discussion, including one 2026 thread with about 300 votes and a recent case of an ill homelab operator. Existing digital-legacy and family handoff products already address parts of this problem; this is only a candidate for further discovery. [Self-hosted data continuity discussion](https://www.reddit.com/r/selfhosted/comments/1s5ko9d/whats_your_plan_for_your_selfhosted_data_if_you/), [operator illness discussion](https://www.reddit.com/r/homelab/comments/1ujt0xp/not_op_husband_is_likely_dying_and/), [HomeOps Tech Handoff](https://apps.apple.com/us/app/homeops-tech-handoff/id6802422751)
+
+**Conclusion:** Keep `pbs-coldstart` as a public prototype, but do not scale it into a hosted product or claim product-market fit. Reassess the problem before further feature work. Strong candidate areas are (1) family-ready handoff/recovery for self-hosted services, and (2) data-safe Compose backup/restore workflows. Both require competitor and buyer validation before selecting a direction.
+
 ## Product boundary
 
 Generic backup integrity and VM restore testing are crowded. PBS verifies datastore data; ProxSave and ProxMenux cover host configuration backup/recovery; AutoRPO and Asternodis sell adjacent recovery-test or DR orchestration capabilities. This project limits itself to the pre-incident cold-start dependency plan for a PBS VM whose datastore lives outside the protected PVE host: independent bootstrap target, datastore name/path reuse, off-host PVE configuration, key custody, and critical guest restore order.

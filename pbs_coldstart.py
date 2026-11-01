@@ -5,8 +5,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shlex
 import sys
+import tempfile
 import tomllib
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -201,7 +203,7 @@ def render_plan(manifest: dict[str, Any], findings: list[Finding]) -> str:
     datastore = manifest["datastore"]
     encryption = manifest["encryption"]
     lines = [
-        f"# PBS cold-start runbook — {manifest['system_name']}",
+        f"# PBS cold-start recovery checklist — {manifest['system_name']}",
         "",
         "> Generated from declared configuration. This is a plan, not proof that a backup or restore works. Review commands and paths before use. It contains no credentials or encryption-key contents.",
         "",
@@ -227,7 +229,9 @@ def render_plan(manifest: dict[str, Any], findings: list[Finding]) -> str:
         "1. Confirm the failed PVE/PBS instance is stopped before bringing the same datastore online elsewhere. Do not allow two PBS instances to operate on one datastore concurrently.",
         f"2. Boot the independent recovery target `{manifest['bootstrap_host']}` and install a compatible PBS/PVE environment using the official installation instructions.",
         f"3. Restore network access to the NAS, then mount the datastore at `{datastore['mount_path']}`. Obtain NAS authentication through its separate approved credential channel; do not add it to this file.",
-        f"4. Only after confirming the previous PBS instance is stopped, review and run this command on the fresh PBS host: `proxmox-backup-manager datastore create {shlex.quote(datastore['name'])} {shlex.quote(datastore['mount_path'])} --reuse-datastore true --overwrite-in-use true`. This can change datastore state; check the current [PBS datastore reuse instructions](https://pbs.proxmox.com/docs/storage.html) first.",
+        # ORIGINAL (preserved, not deleted — disabled by comment):
+        # f"4. Only after confirming the previous PBS instance is stopped, review and run this command on the fresh PBS host: `proxmox-backup-manager datastore create {shlex.quote(datastore['name'])} {shlex.quote(datastore['mount_path'])} --reuse-datastore true --overwrite-in-use true`. This can change datastore state; check the current [PBS datastore reuse instructions](https://pbs.proxmox.com/docs/storage.html) first.",
+        f"4. Only after confirming the previous PBS instance is stopped, review the datastore reuse steps for its backend in the [PBS documentation](https://pbs.proxmox.com/docs/storage.html). For a filesystem datastore, the command form is `proxmox-backup-manager datastore create {shlex.quote(datastore['name'])} {shlex.quote(datastore['mount_path'])} --reuse-datastore true`. Do not add backend-specific options unless the docs for that datastore type require them. This can change datastore state; review the command and current documentation before use.",
         "5. Sign in to the fresh PBS instance and confirm expected snapshots are visible. If client-side encryption is enabled, retrieve the key through your independent secret channel and verify access without copying it into this runbook.",
         "6. Restore the PBS VM or rebuild PBS temporarily, then restore the critical guests below to an isolated target. Confirm each application starts and its data is current.",
         "7. Rebuild the original PVE host, restore its off-host configuration, reconnect storage, and record actual recovery time and any missing dependencies.",
@@ -274,7 +278,26 @@ def main() -> int:
             warnings = sum(item.level == "WARN" for item in findings)
             output += f"\n\n{blockers} blocker(s), {warnings} warning(s). Findings reflect the manifest, not live system verification."
         if args.output:
-            args.output.write_text(output + "\n", encoding="utf-8")
+            source_path = args.manifest.resolve()
+            output_path = args.output.resolve()
+            if source_path == output_path:
+                raise ValueError("output path must not overwrite the input manifest")
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            temporary_path = None
+            try:
+                with tempfile.NamedTemporaryFile(
+                    mode="w", encoding="utf-8", dir=args.output.parent,
+                    prefix=f".{args.output.name}.", delete=False,
+                ) as destination:
+                    temporary_path = Path(destination.name)
+                    destination.write(output + "\n")
+                    destination.flush()
+                    os.fsync(destination.fileno())
+                temporary_path.replace(args.output)
+            finally:
+                if temporary_path is not None:
+                    temporary_path.unlink(missing_ok=True)
+            # ORIGINAL (preserved, not deleted — disabled by comment): args.output.write_text(output + "\n", encoding="utf-8")
         else:
             print(output)
         return 1 if any(item.level == "BLOCKER" for item in findings) else 0

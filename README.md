@@ -12,9 +12,9 @@ PBS supports reusing an existing datastore on a fresh instance, but its name and
 
 - Audits a small TOML manifest for cold-start dependencies: an independent bootstrap host, off-host PVE configuration, NAS/datastore access, and out-of-band encryption-key custody.
 - Flags missing or untested steps and the PBS VM's own backup.
-- Generates a Markdown recovery runbook for a human operator.
+- Generates a Markdown recovery checklist for a human operator to complete and review.
 
-The report is based on facts you declare in the manifest. It does not connect to Proxmox, inspect a datastore, prove a backup is readable, or claim a restore drill passed. It makes no network connections and has no credential fields. The manifest schema rejects unknown and secret-like fields; it accepts only a human-readable key reference. Never put secret values in the manifest, and keep it private because it contains host and storage names.
+The report is based only on facts you declare in the manifest. It does not connect to Proxmox, inspect a datastore, prove a backup is readable, or claim a restore drill passed. It makes no network connections and has no credential fields. The schema rejects unknown field names and field names containing common secret terms; this is not secret detection, and it cannot recognize secret values pasted into ordinary text fields. `key_reference` must be a human-readable pointer, never key material. Keep the manifest private because it contains host and storage names.
 
 ## Quick start
 

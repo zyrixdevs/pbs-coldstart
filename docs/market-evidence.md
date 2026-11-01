@@ -57,3 +57,13 @@ Proxmox specialists sell emergency support and restore-rehearsal services. [WZ-I
 7. Would a safe, local-only test of a full self-hosted Hudu backup (database plus uploaded files) save enough time or reduce enough risk to justify paying for it? What Hudu license would the test environment need?
 
 Treat general interest as weak evidence. A stronger signal is a buyer sharing a real recent failure, granting access to a sanitized sample export, agreeing to a pilot, or identifying an available budget and procurement path.
+
+### Self-hosted Hudu restore-drill hypothesis
+
+1. When did you last restore the Hudu database and uploaded files together into a separate environment? How long did it take, and what had to be fixed?
+2. Are uploaded files local or in S3-compatible storage, and how do you ensure their recovery point matches the database dump?
+3. Which checks do you perform after restore (startup/login, password records, asset data, attachments), and how are results recorded for clients or audits?
+4. Does your current Hudu license permit a separate test instance for recurring drills? What does that license or hosting setup cost?
+5. Would an isolated local runner that automates your existing restore procedure be materially better than Veeam or your current manual process? What part would you pay to remove?
+
+Do not build unattended Hudu instance cloning until the license path and safe isolation model are confirmed. A database restore or archive hash alone must not be presented as proof that the Hudu service and uploaded content are recoverable.

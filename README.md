@@ -29,7 +29,7 @@ Copy `examples/homelab.toml` and replace its fictional values. Do not put secret
 
 ## Business hypothesis
 
-The free CLI is for a single lab. The paid path to validate is a quarterly cold-start rehearsal and recovery-evidence service for small MSPs managing Proxmox clients, with the CLI generating a consistent, portable report. Existing providers sell emergency Proxmox support and restore testing, which shows a paid service category exists; it does not prove buyers want this specific tool or service. See [the market notes](docs/market-evidence.md).
+The original paid path to validate was a quarterly cold-start rehearsal and recovery-evidence service for small MSPs managing Proxmox clients. Existing providers sell emergency Proxmox support and restore testing, but AutoRPO overlaps the report offer, so this is not a differentiated plan. A narrower adjacent candidate under research is local restore-drill automation for self-hosted Hudu: Hudu recommends recurring manual restores of both database and uploaded files, but licensing and buyer demand remain unverified. No business or revenue is validated. See [the market notes](docs/market-evidence.md).
 
 ## Current validation status
 
